@@ -60,3 +60,6 @@ typings/
 .env
 
 build/
+
+# WebStorm Project files
+.idea/**
