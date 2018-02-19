@@ -24,6 +24,9 @@
           if (provider.provideCompletionItems) {
             provider.provideCompletionItems = provider.provideCompletionItems.toString();
           }
+          if (provider.resolveCompletionItem) {
+              provider.resolveCompletionItem = provider.resolveCompletionItem.toString();
+          }
           this.postMessage({
             path: ['monaco', 'languages'],
             event: 'registerCompletionItemProvider',
@@ -272,6 +275,7 @@
             window.addEventListener('resize', resizeHandler);
 
             window.addEventListener('message', handler);
+            parent.postMessage({editorReference: editorReference, event: 'editor-message-handler-ready'}, parent.document.location.href);
 
             function handler(e) {
               var {path, event, args} = e.data;
@@ -319,6 +323,7 @@
               if (event === 'registerCompletionItemProvider') {
                 if (args[1].provideCompletionItems) {
                   args[1].provideCompletionItems = eval(args[1].provideCompletionItems);
+                  args[1].resolveCompletionItem = eval(args[1].resolveCompletionItem);
                 }
               }
               if (event === 'registerSignatureHelpProvider') {
