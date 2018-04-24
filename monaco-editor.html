@@ -484,15 +484,34 @@ class MonacoEditor extends Polymer.Element {
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.editor) {
-      this.editor.dispose();
+      try {
+        this.editor.dispose();
+      }
+      catch (error) {
+        console.error(error);
+      }
       this._setEditor(null);
     }
     if (Array.isArray(this._disposables)) {
-      this._disposables.forEach(d => d.dispose());
+      for (let disposable of this._disposables) {
+        try {
+          disposable.dispose();
+        }
+        catch (error) {
+          console.error(error);
+        }
+      }
       this._disposables = [];
     }
     if (this._syncSchemaListener) {
       this.removeEventListener('mouseenter', this._syncSchemaListener);
+    }
+
+    // Remove IFrames
+    for (let child of this.shadowRoot.childNodes) {
+      if (child.tagName && child.tagName.toLowerCase() === 'iframe') {
+        child.remove();
+      }
     }
   }
 
