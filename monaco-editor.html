@@ -618,8 +618,12 @@ class MonacoEditor extends Polymer.Element {
     this._setEditor(iframe.editor);
     this._setMonaco(iframe.monaco);
 
-    iframe._iframe_.contentDocument.addEventListener('click', () => {
-        this.dispatchEvent(new CustomEvent('monaco-iframe-click'));
+    iframe._iframe_.contentDocument.addEventListener('click', (event) => {
+      this.dispatchEvent(new CustomEvent('monaco-iframe-click', {detail: event}));
+    });
+
+    iframe._iframe_.contentDocument.addEventListener('keydown', (event) => {
+      this.dispatchEvent(new CustomEvent('monaco-iframe-keydown', {detail: event}));
     });
 
     this.dispatchEvent(new CustomEvent('monaco-ready'));
